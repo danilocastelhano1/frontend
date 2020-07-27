@@ -1,49 +1,15 @@
-<div class="Topo">
-</div>
-
-<div class="input-group">
-  <div class="input-group">
-    <label for="Id">Id:</label>
-  </div>         
-  <input class="form-control" disabled [(ngModel)]="TODO_SELECIONADO.id"> <br>      
-  </div>
-
-  <div class="input-group">
-      <label for="Content">Conteúdo:</label>
-  </div>     
-  <div class="input-group">
-    <input class="form-control" required [(ngModel)]="TODO_SELECIONADO.conteudo">         
-  </div>
-  <div class="input-group">
-      <label for="Concluido">Completo:</label>
-  </div>  
-  <div class="input-group">
-        <!--<input class="form-control" placeholder="Concluído" required [(ngModel)]="TODO_SELECIONADO.is_completo">-->
-        <select class="form-control" [(ngModel)]="TODO_SELECIONADO.is_completo">
-            <option>NAO</option>
-            <option>SIM</option>
-          </select>    
-    </div>
- <br>   
-
- <div class="Botao">
-    <button class="btn btn-primary" *ngIf="TODO_SELECIONADO.id == null" (click)="_createTODO()">Adicionar Afazer</button>
-    <br>
-  </div> 
-
-<div class="Botao">
-  <button class="btn btn-primary" *ngIf="TODO_SELECIONADO.id != null" (click)="_updateTODO()">Atualizar Afazer</button>
-  <button class="btn btn-outline-danger" *ngIf="TODO_SELECIONADO.id != null" (click)="_deleteTODO()">Deletar Afazer</button>
-</div>
-<hr>
+<router-outlet></router-outlet>
 
 <div class="Lista">  
-  <h2>Lista de Afazeres: </h2>
+  <h2 class="text-center">TODO List: </h2>
+    <div class="col-12">
+      <button class="btn btn-primary" [disabled]="disableAddButton" style="margin-bottom: 15px;" (click)="addNewTodo()">Add new TODO</button>
+    </div>
     <ul class="list-group">        
       <li  class="list-group-item" *ngFor="let TODO of TODOS">
-        <button type="button" class="list-group-item list-group-item-action" >
-          <h3 (click) = "_TODO_SELECIONADO(TODO)">{{TODO.conteudo}}</h3>
-          <h6 (click) = "_TODO_SELECIONADO(TODO)">Completo: {{TODO.is_completo}}</h6>    
+        <button type="button" class="list-group-item list-group-item-action" [style.background-color]="getBackgroundColor(TODO)">
+          <h3 (click) = "todo_detail(TODO)">{{TODO.conteudo}}</h3>
+          <h6 (click) = "todo_detail(TODO)">Completo: {{TODO.is_completo}}</h6>    
         </button>  
       </li>    
     </ul>

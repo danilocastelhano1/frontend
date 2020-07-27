@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from './api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,18 @@ import { ApiService } from './api.service';
 export class AppComponent {
   title = 'TODO';
   TODOS;
-  TODO_SELECIONADO;
-  data;
+  public disableAddButton: boolean;  
 
-  constructor(private api: ApiService)
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  )
   {
-    this._getAllTODOS();
-    this.TODO_SELECIONADO = {id: null, conteudo: null, is_concluido: null };    
+    this.getAllTODOS();
+    
   }
 
-  _getAllTODOS = () =>
+  getAllTODOS = () =>
   {
     this.api.getAllTODOS().subscribe(
       data => {
@@ -31,63 +34,21 @@ export class AppComponent {
       }
     )
   }
-
-  _TODO_SELECIONADO =(TODOS) =>
-  {
-    this.api.getOneTODO(TODOS.id).subscribe(
-      data => {
-        this.TODO_SELECIONADO = data;
-      },
-      error => 
-      {
-        console.log(error)
-      }
-    )
-  }
-
-  _updateTODO = () =>
-  {
-    this.api.updateTODO(this.TODO_SELECIONADO).subscribe(
-      data => {
-        this.TODO_SELECIONADO = data;
-        this._getAllTODOS();
-        this.TODO_SELECIONADO = {id: null, conteudo: null, is_concluido: null };
-      },
-      error => 
-      {
-        console.log(error)
-      }
-    )
-  }
-
-  _createTODO = () =>
-  {
-    this.api.createTODO(this.TODO_SELECIONADO).subscribe(
-      data => {
-        //this.TODOS.push(data);
-        this._getAllTODOS();
-        this.TODO_SELECIONADO = {id: null, conteudo: null, is_concluido: null };
-      },
-      error => 
-      {
-        console.log(error)
-      }
-    )
-  }  
-
-  _deleteTODO = () =>
-  {
-    this.api.deleteTODO(this.TODO_SELECIONADO.id).subscribe(
-      data => {
-        this._getAllTODOS();
-        this.TODO_SELECIONADO = {id: null, conteudo: null, is_concluido: null };
-      },
-      error => 
-      {
-        console.log(error)
-      }
-    )
-  }
   
-  
+  todo_detail(todo){
+    this.disableAddButton = true;
+    this.router.navigate(['todo-detail', todo.id])
+  }
+
+  addNewTodo(){
+    this.disableAddButton = true;
+    this.router.navigate(['new-todo'])
+  }
+  getBackgroundColor(todo){
+    if (todo.is_completo == 'NAO'){
+      return '#b96e6e'
+    } else{
+      return 'darkcyan'
+    }
+  }
 }
